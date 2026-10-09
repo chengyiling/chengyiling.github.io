@@ -1,0 +1,1420 @@
+{
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-10-07T05:20:14.776Z",
+  "timeZone": "Asia/Shanghai",
+  "currentVersionId": "current-local-2026-10-06",
+  "versions": [
+    {
+      "versionId": "slope-seam-hv-placement-fix",
+      "versionName": "坡口衔接与高压附件车内安装修复版",
+      "date": "2026-10-07",
+      "actualDate": "2026-10-07",
+      "status": "local-uncommitted",
+      "summary": "将平路与上坡坡口改为物理端面埋入式衔接，F02 前轴深入坡面后再连续限功率，并把高压附件、散热器和热管理压缩机挂入统一车辆总成内部安装点。",
+      "changedItems": [
+        "上坡碰撞体向平地引道下方延伸 1.0 m，坡口裸露端面不再参与前轮和底盘接触",
+        "F02 前轴进入坡面 0.8 m 后才开始 1.8 m 连续动力渐变，坡口前保持正常驱动",
+        "power_electronics_unit、hv_harness、power_conversion_box、high_voltage_junction_box、cooling_radiator、thermal_compressor_demo 挂入 vehicle_physics_assembly",
+        "高压/热管理件使用车辆局部安装坐标，不再作为场景根节点零件单独跟随",
+        "新增坡口几何连续性、10 次重复通过和车内安装坐标回归测试"
+      ],
+      "fixedItems": [
+        "修复平路与上坡硬接缝导致的前轮/底盘卡坡",
+        "修复上坡演示在前轮刚接触坡口时提前降功率",
+        "修复高压附件和散热结构停留在车外并跟随车辆的问题"
+      ],
+      "mainModules": [
+        "VehiclePhysicsAssembly",
+        "VehicleScene",
+        "vehiclePhysicsConfig",
+        "slope-hv-regression-tests",
+        "faultScenarios",
+        "AppUI"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "screenshots": [
+        "_tmp/evidence_combined/uphill-seam-before.png",
+        "_tmp/evidence_combined/uphill-seam-after.png",
+        "_tmp/evidence_combined/hv-part-placement-before.png",
+        "_tmp/evidence_combined/hv-part-placement-after.png",
+        "_tmp/evidence_combined/hv-part-transparent-after.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "sourceCommit": null,
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "commitCount": 0,
+      "commitList": [],
+      "firstCommit": null,
+      "lastCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "buildable": false,
+      "uncommitted": true,
+      "snapshotStatus": "none",
+      "buildNote": "本地未提交版本，无新增独立静态快照；未覆盖 current 和 current-final。",
+      "knownRisks": [
+        "F02 坡面停车后的手刹保持阶段仍可能产生小幅前后速度振荡，坡口穿越阶段四轮接触正常",
+        "当前没有为本轮生成独立静态快照，历史版本面板仍只记录本轮改动"
+      ],
+      "notes": "本轮只处理坡口衔接和高压/热管理件车内安装，不修改 P3 导出包、current 快照和 current-final 快照。"
+    },
+    {
+      "versionId": "slope-hold-oscillation-fix",
+      "versionName": "坡面手刹保持稳定性修复版",
+      "date": "2026-10-07",
+      "actualDate": "2026-10-07",
+      "status": "local-uncommitted",
+      "summary": "F02 停车改为先用真实主制动把残余车速压到近零，再切入手刹保持；手刹控制器增加方向迟滞、近零速积分和高速积分泄放。",
+      "changedItems": [
+        "F02 stoppedOnSlope 增加服务制动停车和手刹保持两阶段切换",
+        "手刹控制器增加 resetHandbrakeController 和近零速积分抗饱和",
+        "手刹方向迟滞设为 0.05 m/s，超过积分活动速度后泄放积分",
+        "手刹阻尼从 50000 调整为 150000",
+        "新增 DB11-DB14 手刹稳定、松刹下滑和油门冲突测试"
+      ],
+      "fixedItems": [
+        "修复 F02 从运动中直接拉手刹导致的积分风积和前后振荡",
+        "修复坡面停车后 HUD/车身小幅摆动"
+      ],
+      "mainModules": [
+        "VehicleScene",
+        "VehiclePhysicsAssembly",
+        "vehiclePhysicsConfig",
+        "drive-brake-tests"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "screenshots": [
+        "_tmp/evidence_combined/slope-hold-browser.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "sourceCommit": null,
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "commitCount": 0,
+      "commitList": [],
+      "firstCommit": null,
+      "lastCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "buildable": false,
+      "uncommitted": true,
+      "snapshotStatus": "none",
+      "buildNote": "本地未提交版本，无新增独立静态快照；未覆盖 current 和 current-final。",
+      "knownRisks": [
+        "静态手刹启动前约 1 秒仍有轻微整定过程，稳定阶段已满足 0.02 m/s 和 0.01 m 阈值",
+        "更大坡度和更高入坡速度仍需后续边界测试"
+      ],
+      "notes": "只修复坡面停车保持控制，不重做坡口和高压件安装；未 commit。"
+    },
+    {
+      "versionId": "frozen-slope-hold-2026-10-07",
+      "versionName": "坡面手刹保持稳定冻结版",
+      "date": "2026-10-07",
+      "actualDate": "2026-10-07",
+      "status": "local-uncommitted-frozen",
+      "summary": "F02 坡面停车保持振荡已收口，当前最小方案停止继续调参。",
+      "changedItems": [
+        "stoppedOnSlope 先服务制动后手刹保持",
+        "手刹积分和低通状态重置",
+        "增加近零速积分与换向泄放",
+        "保留真实物理、自然下滑和坡口修复"
+      ],
+      "fixedItems": [
+        "F02 停车保持阶段前后振荡收口"
+      ],
+      "mainModules": [
+        "VehicleScene",
+        "VehiclePhysicsAssembly",
+        "vehiclePhysicsConfig",
+        "drive-brake-tests"
+      ],
+      "verification": {
+        "maxSpeedMps": 0.01718,
+        "maxDisplacementMeters": 0.00757,
+        "contactRate": 1,
+        "continuousFalseFrames": 0,
+        "naturalRelease": true,
+        "pnpmTestExitCode": 0,
+        "pnpmBuildExitCode": 0
+      },
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "screenshots": [
+        "_tmp/evidence_combined/slope-hold-browser.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "sourceCommit": null,
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "commitCount": 0,
+      "commitList": [],
+      "firstCommit": null,
+      "lastCommit": null,
+      "createdFromWorktree": true,
+      "packaged": true,
+      "buildable": true,
+      "uncommitted": true,
+      "snapshotStatus": "frozen-snapshot",
+      "buildNote": "冻结快照已生成；未覆盖 current 和 current-final。",
+      "knownRisks": [
+        "未继续扩大坡度和速度边界",
+        "当前历史版本大部分仍无独立静态快照",
+        "Vite 主 chunk 仍超过 500 kB"
+      ],
+      "frozen": true,
+      "stopParameterSearch": true,
+      "notes": "用户已决定停止参数搜索；代码进入冻结，仅保留证据、版本记录和静态快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": true,
+      "uncommitted": true,
+      "versionId": "current-local-2026-10-06",
+      "versionName": "当前本地版本（含历代版本功能）",
+      "summary": "包含 P0–P3、P2.1–P2.3 与历代版本查看功能；最终静态快照已生成并通过浏览器验收。",
+      "changedItems": [
+        "历代版本面板",
+        "统一版本数据源",
+        "当前版本静态快照",
+        "版本记录自动生成脚本"
+      ],
+      "fixedItems": [
+        "历史版本记录分散",
+        "版本查看可运行性无统一校验"
+      ],
+      "mainModules": [
+        "AppUI",
+        "version-history scripts",
+        "public/versions"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p5"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p5/version-panel-open.png",
+        "_tmp/evidence_p5/version-panel-detail.png",
+        "_tmp/evidence_p5/version-snapshot-load.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "历史版本没有静态快照，只能查看记录；如果主应用继续改动，需生成新的版本快照，不能覆盖本快照。"
+      ],
+      "notes": "最终主页面验收后的静态 Web 快照；只加载预构建资源，不执行 git 操作。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "available",
+      "buildable": true,
+      "buildNote": "已有静态 Web 快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "uncommitted": true,
+      "versionId": "model3-shell-interior",
+      "versionName": "Model 3 外壳和内饰替换版",
+      "summary": "完成 Model 3 外壳、内饰和座舱的资产替换与坐标对齐。",
+      "changedItems": [
+        "接入 Model 3 外壳/内饰资产",
+        "完成外壳与座舱包围盒对齐",
+        "保留旧低模历史资产"
+      ],
+      "fixedItems": [
+        "修复外壳过于粗糙",
+        "修复内饰漏到底盘下方"
+      ],
+      "mainModules": [
+        "VehicleScene",
+        "modelLicenses",
+        "public/models"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p0"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p0/after-shell-normal.png",
+        "_tmp/evidence_p0/after-shell-transparent.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "Tesla 品牌标识不在 CC BY 授权范围内"
+      ],
+      "notes": "P0 阶段记录；无独立静态快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "uncommitted": true,
+      "versionId": "vehicle-physics-assembly",
+      "versionName": "车辆物理总成与缺件禁行版",
+      "summary": "统一车辆物理总成、真实地面接触、缺件禁行和世界静态充电桩。",
+      "changedItems": [
+        "RaycastVehicle 车辆总成",
+        "四轮真实接触和摩擦",
+        "翻车禁行与车顶碰撞体",
+        "自然下滑和真实车速 HUD"
+      ],
+      "fixedItems": [
+        "修复车辆穿模",
+        "修复翻车后仍可加速",
+        "修复自然下滑显示为 0"
+      ],
+      "mainModules": [
+        "VehiclePhysicsAssembly",
+        "vehiclePhysicsConfig",
+        "VehicleAssemblyManager"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p1"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p1/load-flat.png",
+        "_tmp/evidence_p1/rollover-roof-contact.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "极端坡度与高速边界仍需持续回归"
+      ],
+      "notes": "P1 阶段记录；无独立静态快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "uncommitted": true,
+      "versionId": "part-drag-missing-parts",
+      "versionName": "零件拖拽与缺件原因版",
+      "summary": "实现零件点击、拖拽、脱离、吸附重装和汽车专业缺件原因提示。",
+      "changedItems": [
+        "零件“移动”按钮",
+        "拖拽脱离与重新安装",
+        "缺件物理门禁",
+        "顶部缺件原因提示"
+      ],
+      "fixedItems": [
+        "拖拽后仍残留驱动力",
+        "缺件提示过于简短"
+      ],
+      "mainModules": [
+        "PartInteractionManager",
+        "VehicleAssemblyManager",
+        "AppUI"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p2"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p2/part-click-move-button.png",
+        "_tmp/evidence_p2/detached-drive-unit.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "拖拽拾取受透明车身和内饰遮挡影响"
+      ],
+      "notes": "P2 阶段记录；无独立静态快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "uncommitted": true,
+      "versionId": "model3-quality-driving-fixes",
+      "versionName": "Model 3 高质量资产、车轮、车速和手刹修复版",
+      "summary": "替换高质量 Model 3 资产，统一车速 HUD，并加入可用于坡道展示的手刹。",
+      "changedItems": [
+        "高质量外壳与座舱",
+        "四轮视觉/物理对齐",
+        "HUD 改为真实 km/h",
+        "手刹和缺件提示收起"
+      ],
+      "fixedItems": [
+        "修复轮胎陷入",
+        "修复 HUD 与真实车速不一致",
+        "修复缺件说明过长"
+      ],
+      "mainModules": [
+        "VehicleScene",
+        "VehiclePhysicsAssembly",
+        "AppUI"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p2_1"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p2_1/new-shell-normal.png",
+        "_tmp/evidence_p2_1/wheel-ground-contact.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "高质量 GLB 曾分别加载外壳和座舱"
+      ],
+      "notes": "P2.1 阶段记录；无独立静态快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "uncommitted": true,
+      "versionId": "model3-wheel-handbrake-final",
+      "versionName": "Model 3 原车轮毂与手刹收尾版",
+      "summary": "从 Model 3 GLB 切分原车轮组，修正视觉/物理对齐并强化坡道手刹。",
+      "changedItems": [
+        "Model 3 内嵌车轮四象限切分",
+        "轮距/轴距对齐",
+        "坡向物理保持手刹",
+        "GLTFLoader 单次缓存"
+      ],
+      "fixedItems": [
+        "通用轮毂冒充问题",
+        "手刹坡道蠕动",
+        "重复加载同一 GLB"
+      ],
+      "mainModules": [
+        "Model3WheelExtractor",
+        "CachedGltfLoader",
+        "VehiclePhysicsAssembly"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p2_2"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p2_2/wheel-closeup-fl.png",
+        "_tmp/evidence_p2_2/wheel-slope-up10.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "独立轮组导出材质为简化色，原贴图保留在源 GLB"
+      ],
+      "notes": "P2.2 阶段记录；无独立静态快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": false,
+      "uncommitted": true,
+      "versionId": "camera-control-fix",
+      "versionName": "镜头控制和 Shift+左键平移修复版",
+      "summary": "统一零件拖拽期间相机控制的暂停和恢复，恢复 Shift+左键平移。",
+      "changedItems": [
+        "集中式相机暂停/恢复",
+        "异常退出清理",
+        "窗口失焦和页面隐藏清理",
+        "镜头控制专项测试"
+      ],
+      "fixedItems": [
+        "拖拽异常退出后 OrbitControls 残留禁用",
+        "Shift+左键平移失效"
+      ],
+      "mainModules": [
+        "VehicleScene",
+        "camera-control-tests"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p2_3"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p2_3/p3-browser-validation.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "直接杀死 WebGL 上下文时无法执行页面内清理"
+      ],
+      "notes": "P2.3 阶段记录；无独立静态快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": true,
+      "uncommitted": true,
+      "versionId": "model-inventory-export",
+      "versionName": "全零件台账与 Blender 导出版",
+      "summary": "建立全零件模型台账、功能元数据、导出脚本和 Blender 导入/回装规范。",
+      "changedItems": [
+        "model-inventory.json/md",
+        "export-parts.mjs",
+        "四个独立车轮 GLB",
+        "Blender 导入与回装文档"
+      ],
+      "fixedItems": [
+        "历史资产误标为 current",
+        "四轮只写一个模糊条目",
+        "导出缺少许可与哈希"
+      ],
+      "mainModules": [
+        "export-parts",
+        "model-inventory-tests",
+        "docs/blender guides"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p3"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p3/p3-browser-validation.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "外壳/座舱导出为共享源 GLB 复制件，需按材质筛选隔离"
+      ],
+      "notes": "P3 阶段记录；导出包存在，但未生成该版本的静态 Web 快照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "date": "2026-10-06",
+      "status": "local-uncommitted",
+      "sourceCommit": null,
+      "createdFromWorktree": true,
+      "packaged": true,
+      "uncommitted": true,
+      "versionId": "current-local-2026-10-06-pre-p5",
+      "versionName": "当前本地版本（P5 快照前）",
+      "summary": "P5 最终 CSS 修复前的当前构建快照，保留用于版本比较。",
+      "changedItems": [
+        "历代版本面板",
+        "统一版本数据源",
+        "当前版本静态快照",
+        "版本记录自动生成脚本"
+      ],
+      "fixedItems": [
+        "历史版本记录分散",
+        "版本查看可运行性无统一校验"
+      ],
+      "mainModules": [
+        "AppUI",
+        "version-history scripts",
+        "public/versions"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_p5"
+      ],
+      "screenshots": [
+        "_tmp/evidence_p5/version-panel-open.png",
+        "_tmp/evidence_p5/version-panel-detail.png",
+        "_tmp/evidence_p5/version-snapshot-load.png"
+      ],
+      "playable": false,
+      "snapshotPath": null,
+      "knownRisks": [
+        "历史版本没有静态快照，只能查看记录；如果主应用继续改动，需生成新的版本快照，不能覆盖本快照。"
+      ],
+      "notes": "旧当前版本快照，未被覆盖；仅作 P5 快照前对照。",
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "available",
+      "buildable": true,
+      "buildNote": "已有静态 Web 快照。"
+    },
+    {
+      "knownRisks": [
+        "HUD 使用 0.05 m/s 显示死区；物理层仍可能存在小于 0.02 m/s 的瞬时求解微振",
+        "更大坡度或更高速度仍需后续边界回归"
+      ],
+      "date": "2026-10-06",
+      "sourceCommit": null,
+      "mainModules": [
+        "VehiclePhysicsAssembly",
+        "vehiclePhysicsConfig",
+        "VehicleScene",
+        "VehicleHudModel",
+        "drive-brake-tests"
+      ],
+      "changedItems": [
+        "上坡场景增加平地引道",
+        "区分正常上坡动力和上坡没劲表现",
+        "手刹改为动态坡向制动冲量加低速闭环保持力",
+        "HUD 速度增加滤波和低速死区",
+        "距离改为真实世界位移累计",
+        "主制动按目标减速度换算制动力"
+      ],
+      "summary": "为坡道场景增加平地引道，修复手刹静置微振和 HUD 距离抖动，加入真实主制动与连续低速刹停。",
+      "createdFromWorktree": true,
+      "versionId": "drive-brake-experience-fix",
+      "status": "local-uncommitted",
+      "snapshotPath": null,
+      "versionName": "上坡起步、手刹稳定与低速制动修复版",
+      "playable": false,
+      "packaged": false,
+      "screenshots": [
+        "_tmp/evidence_p1_6/slope-lead-in.png",
+        "_tmp/evidence_p1_6/braking-30-to-0.png"
+      ],
+      "uncommitted": true,
+      "fixedItems": [
+        "修复坡前直接生成导致的上坡起步不直观",
+        "修复手刹拉起后低速蠕动和 HUD 抖动",
+        "修复 5 km/h 以下制动长时间拖尾",
+        "修复目标速度下降时仍输出正扭矩"
+      ],
+      "notes": "P1.6 本地未提交版本；未覆盖 current-final 快照，只新增版本记录和 _tmp 证据。",
+      "evidencePaths": [
+        "_tmp/evidence_p1_6"
+      ],
+      "sourceShortCommit": null,
+      "sourceCommitDate": null,
+      "firstCommit": null,
+      "lastCommit": null,
+      "commitList": [],
+      "commitCount": 0,
+      "actualDate": "2026-10-06",
+      "snapshotStatus": "none",
+      "buildable": false,
+      "buildNote": "本地未提交版本，无独立可构建快照。"
+    },
+    {
+      "mainModules": [
+        "VehicleScene",
+        "VehiclePhysicsAssembly",
+        "vehiclePhysicsConfig",
+        "AppUI",
+        "main.css",
+        "version-history"
+      ],
+      "status": "local-uncommitted",
+      "createdFromWorktree": true,
+      "firstCommit": null,
+      "commitCount": 0,
+      "lastCommit": null,
+      "versionId": "shell-brake-history-fullscreen-fix",
+      "commitList": [],
+      "sourceCommit": null,
+      "changedItems": [
+        "恢复 Model 3 外壳显示",
+        "增加前后制动力分配",
+        "修复制动翘尾",
+        "保持低速快速刹停",
+        "回填真实 Git 历史日期",
+        "历代版本改为全屏查看",
+        "返回后恢复当前主页面"
+      ],
+      "knownRisks": [
+        "全屏版本快照仍依赖预构建资源",
+        "更大坡度或更高速度的制动边界仍需后续回归"
+      ],
+      "actualDate": "2026-10-06",
+      "notes": "本合并任务记录；不覆盖 current 和 current-final 快照。",
+      "screenshots": [
+        "_tmp/evidence_combined/shell-restored.png",
+        "_tmp/evidence_combined/braking-no-rear-lift.png",
+        "_tmp/evidence_combined/fullscreen-version-open.png"
+      ],
+      "snapshotPath": null,
+      "sourceShortCommit": null,
+      "summary": "修复 Model 3 外壳被共享父节点隐藏，加入前后轴制动分配和渐变，回填真实 Git 历史日期并将版本查看改为全视口。",
+      "date": "2026-10-06",
+      "snapshotStatus": "none",
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "uncommitted": true,
+      "versionName": "车壳恢复、制动平衡、历史版本与全屏查看版",
+      "sourceCommitDate": null,
+      "playable": false,
+      "fixedItems": [
+        "修复整个车轮父节点被隐藏导致外壳消失",
+        "修复四轮等力制动和瞬间制动力过大",
+        "修复版本日期全部显示同一天",
+        "修复小尺寸版本 iframe 布局拥挤"
+      ],
+      "packaged": false,
+      "buildable": false,
+      "buildNote": "本地未提交版本，没有新增独立静态快照；未覆盖 current 和 current-final。"
+    },
+    {
+      "actualDate": "2026-10-06",
+      "mainModules": [
+        "VehicleScene",
+        "AppUI",
+        "main",
+        "combined-tests"
+      ],
+      "snapshotStatus": "none",
+      "buildNote": "本地未提交版本，无新增独立静态快照。",
+      "commitCount": 0,
+      "buildable": false,
+      "date": "2026-10-06",
+      "lastCommit": null,
+      "packaged": false,
+      "uncommitted": true,
+      "snapshotPath": null,
+      "createdFromWorktree": true,
+      "status": "local-uncommitted",
+      "fixedItems": [
+        "修复恢复显示逻辑重新显示旧轮",
+        "修复 _updateWheels 旋转旧轮",
+        "修复浏览器没有实际主制动入口",
+        "修复制动请求未覆盖驱动目标"
+      ],
+      "screenshots": [
+        "_tmp/evidence_combined/wheels-after-reset.png",
+        "_tmp/evidence_combined/wheels-after-isolation.png",
+        "_tmp/evidence_combined/brake-no-rear-lift-browser.png"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "knownRisks": [
+        "历史版本静态快照仍依赖既有 current/current-final",
+        "更高速度和更大坡度边界待回归",
+        "正式轮组由轮辋和轮胎两层 Mesh 组成，数量按 wheel root 计为 4"
+      ],
+      "versionName": "旧轮去重与实际制动入口修复版",
+      "sourceCommitDate": null,
+      "sourceShortCommit": null,
+      "notes": "修复旧轮重复显示与浏览器实际制动输入；不覆盖 current 和 current-final。",
+      "sourceCommit": null,
+      "commitList": [],
+      "versionId": "legacy-wheel-hidden-brake-input-fix",
+      "playable": false,
+      "changedItems": [
+        "去除多出的旧 GLB 轮件显示",
+        "正式车轮只保留 physics_wheel_fl/fr/rl/rr",
+        "restoreIsolation/ghost/isolate 跳过 legacyWheelNode",
+        "vehiclePhysics 模式只同步物理轮",
+        "增加刹车按钮和 B 键主制动入口",
+        "制动时 setDriveTarget(0) 且 engineForce=0",
+        "保持 65/35 前后制动力分配和 0.2 s 渐变"
+      ],
+      "firstCommit": null,
+      "summary": "正式车轮只保留四个 physics_wheel_* 轮组，旧 GLB 轮件在所有恢复路径中保持隐藏，并增加浏览器实际可用的主制动按钮与 B 键入口。"
+    },
+    {
+      "screenshots": [
+        "_tmp/evidence_combined/uphill-sequence.png",
+        "_tmp/evidence_combined/version-return-after.png",
+        "_tmp/evidence_combined/brake-rear-lift-browser.png"
+      ],
+      "date": "2026-10-06",
+      "summary": "上坡演示先使用正常动力完成平路起步，前轴进入坡面后渐进限功率；修复版本返回白屏；对齐物理和视觉制动姿态。",
+      "actualDate": "2026-10-06",
+      "mainModules": [
+        "VehicleScene",
+        "AppUI",
+        "main",
+        "faultScenarios",
+        "vehiclePhysicsConfig",
+        "combined-tests"
+      ],
+      "snapshotPath": null,
+      "sourceCommitDate": null,
+      "changedItems": [
+        "F02 上坡演示状态机",
+        "平路引道正常动力",
+        "进入坡面后渐进降功率",
+        "坡面停车自动保持",
+        "版本返回保留面板并重绘",
+        "正常制动力降至 3.8 m/s²",
+        "视觉姿态继续使用物理 quaternion",
+        "F02 演示坡角调整为 15° 以避免 30° 坡口尖角冲量"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "packaged": false,
+      "versionName": "上坡演示顺序、版本返回与视觉制动修复版",
+      "status": "local-uncommitted",
+      "playable": false,
+      "createdFromWorktree": true,
+      "sourceShortCommit": null,
+      "lastCommit": null,
+      "snapshotStatus": "none",
+      "knownRisks": [
+        "历史版本静态快照仍依赖既有 current/current-final",
+        "更大坡度和更高速度边界待回归",
+        "上坡演示 30° 陡坡在坡口会很快进入停车保持",
+        "坡口接触仍有单帧反向速度趋势，但自动保持后很快稳定"
+      ],
+      "commitCount": 0,
+      "uncommitted": true,
+      "fixedItems": [
+        "修复平路阶段提前限功率",
+        "修复版本返回面板全白",
+        "修复返回后无法继续选择",
+        "改善实际刹车尾部和视觉姿态"
+      ],
+      "sourceCommit": null,
+      "buildable": false,
+      "commitList": [],
+      "firstCommit": null,
+      "buildNote": "本地未提交版本，无新增独立静态快照。",
+      "versionId": "uphill-sequence-version-return-brake-visual-fix",
+      "notes": "本轮修复上坡顺序、版本返回和视觉制动；不覆盖 current 和 current-final。"
+    },
+    {
+      "versionId": "git-20261005",
+      "versionName": "2026-10-05 Git 提交里程碑",
+      "date": "2026-10-05",
+      "actualDate": "2026-10-05",
+      "status": "committed",
+      "sourceCommit": "40690d1cf380a99ba8e25843425ff7927d55d4c8",
+      "sourceShortCommit": "40690d1",
+      "sourceCommitDate": "2026-10-05 15:21:45 +0800",
+      "firstCommit": "40690d1cf380a99ba8e25843425ff7927d55d4c8",
+      "lastCommit": "40690d1cf380a99ba8e25843425ff7927d55d4c8",
+      "commitList": [
+        {
+          "hash": "40690d1cf380a99ba8e25843425ff7927d55d4c8",
+          "shortHash": "40690d1",
+          "date": "2026-10-05 15:21:45 +0800",
+          "subject": "docs: 补项目级AGENTS.md与PROGRESS.md进度指针"
+        }
+      ],
+      "commitCount": 1,
+      "summary": "补入项目级开发规则、进度快照和证据台账指针。",
+      "changedItems": [
+        "40690d1 docs: 补项目级AGENTS.md与PROGRESS.md进度指针"
+      ],
+      "fixedItems": [],
+      "mainModules": [
+        "Git history",
+        "web"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "screenshots": [],
+      "playable": false,
+      "snapshotPath": null,
+      "snapshotStatus": "none",
+      "buildable": true,
+      "buildNote": "提交源码可构建，但本任务未构建历史静态快照。",
+      "createdFromWorktree": false,
+      "packaged": false,
+      "uncommitted": false,
+      "knownRisks": [
+        "历史提交未生成静态 Web 快照，只能查看 commit 与版本记录。"
+      ],
+      "notes": "真实 Git 提交 1 条，最早 40690d1，最后 40690d1。"
+    },
+    {
+      "versionId": "git-20261004",
+      "versionName": "2026-10-04 Git 提交里程碑",
+      "date": "2026-10-04",
+      "actualDate": "2026-10-04",
+      "status": "committed",
+      "sourceCommit": "f02b3dcee29f26d2f3ee18565f2426dee0a0745c",
+      "sourceShortCommit": "f02b3dc",
+      "sourceCommitDate": "2026-10-04 18:57:39 +0800",
+      "firstCommit": "513cd1083bb158a6275e9f68e3a42cfb0648c81f",
+      "lastCommit": "f02b3dcee29f26d2f3ee18565f2426dee0a0745c",
+      "commitList": [
+        {
+          "hash": "513cd1083bb158a6275e9f68e3a42cfb0648c81f",
+          "shortHash": "513cd10",
+          "date": "2026-10-04 13:00:23 +0800",
+          "subject": "fix: 新增零件接地与比例整改"
+        },
+        {
+          "hash": "19a0c6675358f3aa84ca42e19c7897c9a225eac7",
+          "shortHash": "19a0c66",
+          "date": "2026-10-04 13:01:49 +0800",
+          "subject": "docs: T0 接地与比例整改记录"
+        },
+        {
+          "hash": "1023aa0bae758ef637d0e0d1979381efb25296e9",
+          "shortHash": "1023aa0",
+          "date": "2026-10-04 13:08:41 +0800",
+          "subject": "fix: 场景固定件跟随根治与全量断言"
+        },
+        {
+          "hash": "72355c60973e56a2e968bb4866f30bee453a8443",
+          "shortHash": "72355c6",
+          "date": "2026-10-04 13:11:59 +0800",
+          "subject": "feat: WebAudio 合成电动行驶声与刹车声"
+        },
+        {
+          "hash": "66c8dee760d87f9d899c86b027a404c5cb526cfe",
+          "shortHash": "66c8dee",
+          "date": "2026-10-04 13:16:36 +0800",
+          "subject": "feat: 演示起步渐变与刹车惯性表现"
+        },
+        {
+          "hash": "a41d87543d10988187b716ab134369426a4be48b",
+          "shortHash": "a41d875",
+          "date": "2026-10-04 13:18:41 +0800",
+          "subject": "fix: 场景切换完整重置消除残留"
+        },
+        {
+          "hash": "71059c967475bd1fd7280560e3c6fa9d796e1892",
+          "shortHash": "71059c9",
+          "date": "2026-10-04 13:22:37 +0800",
+          "subject": "feat: 场景故障零件自发光标注"
+        },
+        {
+          "hash": "ec8614345b2ad39870025fb7655ec57086b5b7b7",
+          "shortHash": "ec86143",
+          "date": "2026-10-04 13:25:13 +0800",
+          "subject": "feat: 坡道可视化随坡度参数"
+        },
+        {
+          "hash": "b89b65891fafa441296d345fa90e78e9c0f75ca7",
+          "shortHash": "b89b658",
+          "date": "2026-10-04 13:27:05 +0800",
+          "subject": "feat: 当前参数一键复制"
+        },
+        {
+          "hash": "e8d1d0df38d6b130db47854940060e47cd349d7c",
+          "shortHash": "e8d1d0d",
+          "date": "2026-10-04 13:28:58 +0800",
+          "subject": "docs: 第19步收尾与台账更新"
+        },
+        {
+          "hash": "87cbfdde4f27663e37b377a750e464220097c89e",
+          "shortHash": "87cbfdd",
+          "date": "2026-10-04 14:18:30 +0800",
+          "subject": "assets: Model3 参考件入库与许可登记"
+        },
+        {
+          "hash": "6037ea20bf00ea9060e00748c735c385acc36026",
+          "shortHash": "6037ea2",
+          "date": "2026-10-04 14:40:23 +0800",
+          "subject": "assets: Model3内饰版入库与基底角色更新"
+        },
+        {
+          "hash": "f02b3dcee29f26d2f3ee18565f2426dee0a0745c",
+          "shortHash": "f02b3dc",
+          "date": "2026-10-04 18:57:39 +0800",
+          "subject": "feat: 内饰座舱件整套替换与占位件清理"
+        }
+      ],
+      "commitCount": 13,
+      "summary": "完成零件接地、WebAudio、坡道表现、Model 3 参考资产和内饰座舱整套替换。",
+      "changedItems": [
+        "513cd10 fix: 新增零件接地与比例整改",
+        "19a0c66 docs: T0 接地与比例整改记录",
+        "1023aa0 fix: 场景固定件跟随根治与全量断言",
+        "72355c6 feat: WebAudio 合成电动行驶声与刹车声",
+        "66c8dee feat: 演示起步渐变与刹车惯性表现",
+        "a41d875 fix: 场景切换完整重置消除残留",
+        "71059c9 feat: 场景故障零件自发光标注",
+        "ec86143 feat: 坡道可视化随坡度参数",
+        "b89b658 feat: 当前参数一键复制",
+        "e8d1d0d docs: 第19步收尾与台账更新"
+      ],
+      "fixedItems": [
+        "新增零件接地与比例整改",
+        "场景固定件跟随根治与全量断言",
+        "场景切换完整重置消除残留"
+      ],
+      "mainModules": [
+        "Git history",
+        "web"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "screenshots": [],
+      "playable": false,
+      "snapshotPath": null,
+      "snapshotStatus": "none",
+      "buildable": true,
+      "buildNote": "提交源码可构建，但本任务未构建历史静态快照。",
+      "createdFromWorktree": false,
+      "packaged": false,
+      "uncommitted": false,
+      "knownRisks": [
+        "历史提交未生成静态 Web 快照，只能查看 commit 与版本记录。"
+      ],
+      "notes": "真实 Git 提交 13 条，最早 513cd10，最后 f02b3dc。"
+    },
+    {
+      "versionId": "git-20261003",
+      "versionName": "2026-10-03 Git 提交里程碑",
+      "date": "2026-10-03",
+      "actualDate": "2026-10-03",
+      "status": "committed",
+      "sourceCommit": "e8fa2841c243387ed39f265e6d2ba0eb0acca421",
+      "sourceShortCommit": "e8fa284",
+      "sourceCommitDate": "2026-10-03 22:27:49 +0800",
+      "firstCommit": "442ac4a0992f14d323a6168c07fc84cc41865f23",
+      "lastCommit": "e8fa2841c243387ed39f265e6d2ba0eb0acca421",
+      "commitList": [
+        {
+          "hash": "442ac4a0992f14d323a6168c07fc84cc41865f23",
+          "shortHash": "442ac4a",
+          "date": "2026-10-03 12:06:28 +0800",
+          "subject": "baseline: 参数补全通道改造后首版"
+        },
+        {
+          "hash": "b21c21e00e88688f7a53b40d12f2ac6df463e1a5",
+          "shortHash": "b21c21e",
+          "date": "2026-10-03 12:08:22 +0800",
+          "subject": "docs: 记录基线提交哈希与闸门复核"
+        },
+        {
+          "hash": "aaffe758692061701c5cd0e3f8501e398e9afc38",
+          "shortHash": "aaffe75",
+          "date": "2026-10-03 12:09:31 +0800",
+          "subject": "docs: 补入证据文件哈希与基线核验记录"
+        },
+        {
+          "hash": "d2f8286a119af3b95cc43d09de577280feef04d3",
+          "shortHash": "d2f8286",
+          "date": "2026-10-03 12:20:20 +0800",
+          "subject": "chore: 清理越界临时目录并登记"
+        },
+        {
+          "hash": "0193a478407b94d5ca50da61475754fd33b976da",
+          "shortHash": "0193a47",
+          "date": "2026-10-03 12:48:16 +0800",
+          "subject": "feat: 知识点文本第一批（6 条挂载条目）"
+        },
+        {
+          "hash": "da926edeb56154fe773d9fdbca09f3d55e57605d",
+          "shortHash": "da926ed",
+          "date": "2026-10-03 13:05:19 +0800",
+          "subject": "feat: 热管理与DC-DC知识点挂载与正文（第二批）"
+        },
+        {
+          "hash": "9197dcc193ddd476bcbc0d9a4fbab55bbc794d9f",
+          "shortHash": "9197dcc",
+          "date": "2026-10-03 13:09:46 +0800",
+          "subject": "docs: 第二批验收与知识点任务关闭"
+        },
+        {
+          "hash": "94a6ae429ab04daf59103487eeabdf6ae05204c8",
+          "shortHash": "94a6ae4",
+          "date": "2026-10-03 14:05:34 +0800",
+          "subject": "docs: 证据表中间态（B/C类+人工取证等待）"
+        },
+        {
+          "hash": "3c125bdeb60fa4cc4b521b4fcb311f1b4ee29b74",
+          "shortHash": "3c125bd",
+          "date": "2026-10-03 14:15:12 +0800",
+          "subject": "docs: 45项参数证据终表（待人工批准）"
+        },
+        {
+          "hash": "81afa573a19fde8f541a15783033a3d5337d747f",
+          "shortHash": "81afa57",
+          "date": "2026-10-03 14:28:37 +0800",
+          "subject": "feat: 参数来源状态体系扩展"
+        },
+        {
+          "hash": "4f56b9f06382c08dc5ffa8b76fbca5e4ca2e24b6",
+          "shortHash": "4f56b9f",
+          "date": "2026-10-03 14:37:09 +0800",
+          "subject": "feat: A类参数回填（Model 3 RWD 基准）"
+        },
+        {
+          "hash": "a8e9cd5703ed470c54580ef30ea261c4549859d4",
+          "shortHash": "a8e9cd5",
+          "date": "2026-10-03 14:42:30 +0800",
+          "subject": "feat: B/C类参数回填与可选公式启用"
+        },
+        {
+          "hash": "3900778bc2eeb187e6318765d582268d62bfd0d9",
+          "shortHash": "3900778",
+          "date": "2026-10-03 14:43:01 +0800",
+          "subject": "docs: 写入步三批完成与最终总结"
+        },
+        {
+          "hash": "64dd48244a37718f50ea5c97196339a3f444558b",
+          "shortHash": "64dd482",
+          "date": "2026-10-03 14:49:42 +0800",
+          "subject": "docs: 实验体系设计草案，待人工评审"
+        },
+        {
+          "hash": "ff8f7bfdd4f0c4699826c5db9022b820b6f72f87",
+          "shortHash": "ff8f7bf",
+          "date": "2026-10-03 14:53:31 +0800",
+          "subject": "docs: 实验草案单位口径与表述修正"
+        },
+        {
+          "hash": "11379fcedb3763b14a8f5323b22ae56ad3b2cf2f",
+          "shortHash": "11379fc",
+          "date": "2026-10-03 14:54:35 +0800",
+          "subject": "docs: 实验手册上半（电池+整车 8 条）"
+        },
+        {
+          "hash": "91b88ecd1403280482ba7d64a65a4b2b306a4215",
+          "shortHash": "91b88ec",
+          "date": "2026-10-03 14:57:28 +0800",
+          "subject": "docs: 实验手册下半（电机+热管理+充电 4 条+README）"
+        },
+        {
+          "hash": "722969a85e5f6b461fedbd140b9dd812e6e46f55",
+          "shortHash": "722969a",
+          "date": "2026-10-03 15:20:25 +0800",
+          "subject": "feat: 仿真驱动轮转动效"
+        },
+        {
+          "hash": "5bad54a9d6c0073fa960f680947f802b09975542",
+          "shortHash": "5bad54a",
+          "date": "2026-10-03 15:30:34 +0800",
+          "subject": "feat: 故障演出与音效"
+        },
+        {
+          "hash": "a04b8e3cb4da66e9abe58792661e62f47a5aed59",
+          "shortHash": "a04b8e3",
+          "date": "2026-10-03 15:38:38 +0800",
+          "subject": "feat: 仿真操作按钮顶部工具栏"
+        },
+        {
+          "hash": "bc33e7c3f233e15f71773beadcf1c85e751c48d4",
+          "shortHash": "bc33e7c",
+          "date": "2026-10-03 15:41:18 +0800",
+          "subject": "feat: 表现层行驶物理感"
+        },
+        {
+          "hash": "6a9e613fdf4923979f2f456f487d055601235872",
+          "shortHash": "6a9e613",
+          "date": "2026-10-03 15:47:31 +0800",
+          "subject": "fix: 场景穿模修复与程序化道路"
+        },
+        {
+          "hash": "396b26949f1c49d640c7782fa56f3bcec6269f3a",
+          "shortHash": "396b269",
+          "date": "2026-10-03 16:15:18 +0800",
+          "subject": "feat: CC0 音效素材接入"
+        },
+        {
+          "hash": "93a23c432369a6624271a29254960900f77bae12",
+          "shortHash": "93a23c4",
+          "date": "2026-10-03 16:28:30 +0800",
+          "subject": "feat: 道路贴图素材接入与许可登记"
+        },
+        {
+          "hash": "1e3bf1dd0efd14e1ced7725f969bcdf512670cc9",
+          "shortHash": "1e3bf1d",
+          "date": "2026-10-03 16:31:11 +0800",
+          "subject": "docs: 故障场景库草案"
+        },
+        {
+          "hash": "3f1a9ff1a45c97db45b3b8ac85a085ec93baff48",
+          "shortHash": "3f1a9ff",
+          "date": "2026-10-03 16:32:46 +0800",
+          "subject": "docs: 第14步体验增强收尾记录"
+        },
+        {
+          "hash": "df4990740a2a80adf815581a6615d258bae869f0",
+          "shortHash": "df49907",
+          "date": "2026-10-03 16:53:10 +0800",
+          "subject": "feat: 常见问题场景库上线"
+        },
+        {
+          "hash": "ba35e8de10281d905034a30e105c4c1235071456",
+          "shortHash": "ba35e8d",
+          "date": "2026-10-03 16:55:22 +0800",
+          "subject": "docs: 修订网络与资产规则（人工授权扩大）"
+        },
+        {
+          "hash": "f09b059e32e7e458d10511c73481511bb056284a",
+          "shortHash": "f09b059",
+          "date": "2026-10-03 17:02:41 +0800",
+          "subject": "feat: 车身显示模式切换（默认实体）"
+        },
+        {
+          "hash": "04147bf6eaafe51e12d79fc09048e24519ba83b1",
+          "shortHash": "04147bf",
+          "date": "2026-10-03 17:11:16 +0800",
+          "subject": "assets: 候选模型暂存与体检（待批准）"
+        },
+        {
+          "hash": "f08961214bc2667fb053eaeb97ee44198f0f52aa",
+          "shortHash": "f089612",
+          "date": "2026-10-03 17:38:40 +0800",
+          "subject": "fix: 透明模式拾取优先级修复"
+        },
+        {
+          "hash": "52894e220cf3c4b53c5222d5bd647658703c9bb5",
+          "shortHash": "52894e2",
+          "date": "2026-10-03 17:52:27 +0800",
+          "subject": "feat: 新零件入库与场景挂载"
+        },
+        {
+          "hash": "88aedaaebd8548b3640e9a33ee45a168ceceb55c",
+          "shortHash": "88aedaa",
+          "date": "2026-10-03 17:55:29 +0800",
+          "subject": "feat: 知识点第五批与许可署名页更新"
+        },
+        {
+          "hash": "ca162363ea328db6d691db08e5cd59bdb048c48d",
+          "shortHash": "ca16236",
+          "date": "2026-10-03 18:09:24 +0800",
+          "subject": "fix: 仿真时序逐帧驱动场景动画"
+        },
+        {
+          "hash": "8a837b2877b31b98a554da6240a8c84cdbd330d9",
+          "shortHash": "8a837b2",
+          "date": "2026-10-03 18:29:23 +0800",
+          "subject": "feat: 知识点语音讲解"
+        },
+        {
+          "hash": "21a8669c0d66cf590a41988070fa25d382de3c72",
+          "shortHash": "21a8669",
+          "date": "2026-10-03 18:42:23 +0800",
+          "subject": "feat: 零件隔离与虚化查看"
+        },
+        {
+          "hash": "f2a38924a0e03d3b9d5d3cbe23bb6bda5d425aae",
+          "shortHash": "f2a3892",
+          "date": "2026-10-03 18:57:05 +0800",
+          "subject": "feat: 爆炸视图原型"
+        },
+        {
+          "hash": "d9111eaed7ca92fb40156679189755603ba9577e",
+          "shortHash": "d9111ea",
+          "date": "2026-10-03 19:04:41 +0800",
+          "subject": "docs: P1-P4结构讲解增强收尾"
+        },
+        {
+          "hash": "b6d228fc26d07abd9ee54a5601b1784ea9739638",
+          "shortHash": "b6d228f",
+          "date": "2026-10-03 19:36:44 +0800",
+          "subject": "fix: 固定场景件不再随伪行驶位移"
+        },
+        {
+          "hash": "25c39003a5f6259cc88b0a73c4bd085b74a48cf9",
+          "shortHash": "25c3900",
+          "date": "2026-10-03 19:37:13 +0800",
+          "subject": "feat: HUD 距离与时间显示"
+        },
+        {
+          "hash": "bcbafe65bfe9dd02a31f83dc693f8351ce35fb0e",
+          "shortHash": "bcbafe6",
+          "date": "2026-10-03 19:38:13 +0800",
+          "subject": "feat: 播放结束平滑淡出与提示"
+        },
+        {
+          "hash": "c16fab7519c38bb4d7b527a5c5f30dc192daccac",
+          "shortHash": "c16fab7",
+          "date": "2026-10-03 19:39:04 +0800",
+          "subject": "fix: 行驶音频高频刺耳修复"
+        },
+        {
+          "hash": "73a85aaf2de7bfa73f7d502a5f59bee32d291759",
+          "shortHash": "73a85aa",
+          "date": "2026-10-03 19:42:52 +0800",
+          "subject": "feat: 轮胎痕迹表现层效果"
+        },
+        {
+          "hash": "531037602e2c7e4995e5348360b36f50fd546211",
+          "shortHash": "5310376",
+          "date": "2026-10-03 19:45:22 +0800",
+          "subject": "feat: 场景参数偏离值备注显示"
+        },
+        {
+          "hash": "5c1f33365a3356d065eff815b69f84cfa222033f",
+          "shortHash": "5c1f333",
+          "date": "2026-10-03 19:58:36 +0800",
+          "subject": "assets: 零件入库批次1"
+        },
+        {
+          "hash": "d88138aa48d360b37739a9d824e1663a0efba5cf",
+          "shortHash": "d88138a",
+          "date": "2026-10-03 20:02:03 +0800",
+          "subject": "feat: 零件挂载与知识点第1批"
+        },
+        {
+          "hash": "e287e1597e339765a29a1913b9ec5ef581d00f19",
+          "shortHash": "e287e15",
+          "date": "2026-10-03 20:02:21 +0800",
+          "subject": "assets: 零件入库批次2"
+        },
+        {
+          "hash": "1880d0c0e9c6d2717f2abb39dff20b9b7b5497ca",
+          "shortHash": "1880d0c",
+          "date": "2026-10-03 20:31:35 +0800",
+          "subject": "feat: 零件挂载与知识点第2批"
+        },
+        {
+          "hash": "acbf128ba8e2cc8a3873693c5e0453633dd6bb0f",
+          "shortHash": "acbf128",
+          "date": "2026-10-03 20:41:07 +0800",
+          "subject": "docs: 第16步体验修复与资产扩容收尾"
+        },
+        {
+          "hash": "096fdcba5e75c32d452395c1d622c234f5bf0cc1",
+          "shortHash": "096fdcb",
+          "date": "2026-10-03 20:53:32 +0800",
+          "subject": "docs: 开发证据台账与重放脚本"
+        },
+        {
+          "hash": "ac6def4cb32b48c41616e7de4030442b0e8483b4",
+          "shortHash": "ac6def4",
+          "date": "2026-10-03 21:30:23 +0800",
+          "subject": "fix: 新增零件装配语义布局整改"
+        },
+        {
+          "hash": "0c7be781b41fe172199007a3f9d2529bd7615920",
+          "shortHash": "0c7be78",
+          "date": "2026-10-03 21:40:45 +0800",
+          "subject": "fix: 行驶音频状态绑定与刺耳整改档1"
+        },
+        {
+          "hash": "f35920cbe296fb8d28e191c17f10bcc9cfd28450",
+          "shortHash": "f35920c",
+          "date": "2026-10-03 21:50:27 +0800",
+          "subject": "feat: 场景解决方法三段式说明"
+        },
+        {
+          "hash": "0867572a91077da6b91c4d32c96e2981f0dadc80",
+          "shortHash": "0867572",
+          "date": "2026-10-03 22:16:15 +0800",
+          "subject": "style: 引入water.css完成面板与控件视觉层级升级"
+        },
+        {
+          "hash": "e8fa2841c243387ed39f265e6d2ba0eb0acca421",
+          "shortHash": "e8fa284",
+          "date": "2026-10-03 22:27:49 +0800",
+          "subject": "docs: 第18步收尾与台账更新"
+        }
+      ],
+      "commitCount": 55,
+      "summary": "基础仿真、参数证据、知识点、故障演出、道路表现与教学交互形成首个完整里程碑。",
+      "changedItems": [
+        "442ac4a baseline: 参数补全通道改造后首版",
+        "b21c21e docs: 记录基线提交哈希与闸门复核",
+        "aaffe75 docs: 补入证据文件哈希与基线核验记录",
+        "d2f8286 chore: 清理越界临时目录并登记",
+        "0193a47 feat: 知识点文本第一批（6 条挂载条目）",
+        "da926ed feat: 热管理与DC-DC知识点挂载与正文（第二批）",
+        "9197dcc docs: 第二批验收与知识点任务关闭",
+        "94a6ae4 docs: 证据表中间态（B/C类+人工取证等待）",
+        "3c125bd docs: 45项参数证据终表（待人工批准）",
+        "81afa57 feat: 参数来源状态体系扩展"
+      ],
+      "fixedItems": [
+        "场景穿模修复与程序化道路",
+        "透明模式拾取优先级修复",
+        "仿真时序逐帧驱动场景动画",
+        "固定场景件不再随伪行驶位移",
+        "行驶音频高频刺耳修复",
+        "新增零件装配语义布局整改",
+        "行驶音频状态绑定与刺耳整改档1"
+      ],
+      "mainModules": [
+        "Git history",
+        "web"
+      ],
+      "evidencePaths": [
+        "_tmp/evidence_combined"
+      ],
+      "screenshots": [],
+      "playable": false,
+      "snapshotPath": null,
+      "snapshotStatus": "none",
+      "buildable": true,
+      "buildNote": "提交源码可构建，但本任务未构建历史静态快照。",
+      "createdFromWorktree": false,
+      "packaged": false,
+      "uncommitted": false,
+      "knownRisks": [
+        "历史提交未生成静态 Web 快照，只能查看 commit 与版本记录。"
+      ],
+      "notes": "真实 Git 提交 55 条，最早 442ac4a，最后 e8fa284。"
+    }
+  ]
+}
